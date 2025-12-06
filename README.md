@@ -1,11 +1,15 @@
-# Grid Layout App
+# Grid Layout App with Local Notifications
 
-A React Native application demonstrating Flexbox layouts and navigation with both row and grid views.
+A React Native application demonstrating Flexbox layouts, navigation, and **local push notifications** with both row and grid views.
 
 ## Features
 
 - **Dynamic Layout Switching**: Toggle between row and grid layouts
 - **Navigation**: Navigate to different screens (Photos, Music, Messages, Calls, Camera)
+- **Local Notifications**: 
+  - Immediate notifications when navigating to screens
+  - Scheduled test notifications (5-second delay)
+  - Permission handling and notification listeners
 - **Responsive Design**: Uses Flexbox for proper layout on different screen sizes
 - **FlatList Implementation**: Efficient rendering with React Native's FlatList component
 
@@ -13,7 +17,9 @@ A React Native application demonstrating Flexbox layouts and navigation with bot
 
 ### HomeScreen
 - Main screen with toggle functionality between row and grid views
+- **Test Notification Button**: Schedules a notification 5 seconds in the future
 - Uses FlatList with dynamic numColumns based on view type
+- Implements notification triggers on item tap
 - Implements proper Flexbox styling for responsive design
 
 ### Navigation Screens
@@ -22,6 +28,25 @@ A React Native application demonstrating Flexbox layouts and navigation with bot
 - **MessagesScreen**: Welcome to your Messages
 - **CallsScreen**: Make calls from Here
 - **CameraScreen**: Welcome to the camera app
+
+## Notifications Features
+
+### Immediate Notifications
+- Triggered when tapping any menu item
+- Shows title and body with the screen name
+- Appears before navigation occurs
+
+### Scheduled Notifications
+- Test notification button schedules notification 5 seconds ahead
+- Demonstrates delayed notification delivery
+- Works even when app is in background
+
+### Permission Handling
+- Automatic permission request on app startup
+- Platform-specific configuration (Android channels, iOS background modes)
+- User-friendly alerts if permissions are denied
+
+For detailed notification implementation, see [NOTIFICATIONS_DOCUMENTATION.md](./NOTIFICATIONS_DOCUMENTATION.md)
 
 ## Installation
 
@@ -40,13 +65,14 @@ A React Native application demonstrating Flexbox layouts and navigation with bot
    ```
 5. Start the development server:
    ```
-   npm start
+   npx expo start
    ```
 
 ## Key Technologies
 
 - **React Native**: Cross-platform mobile development
 - **React Navigation**: Screen navigation and routing
+- **Expo Notifications**: Local push notification system
 - **Expo Vector Icons**: Icon library for consistent iconography
 - **FlatList**: Efficient list rendering component
 - **Flexbox**: CSS layout system for responsive design

@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Notifications from 'expo-notifications';
 
 const { width } = Dimensions.get('window');
 
@@ -53,14 +54,39 @@ const HomeScreen = ({ navigation }) => {
     },
   ];
 
-  const handleItemPress = (screenName) => {
+  const handleItemPress = async (screenName, itemName) => {
+    // Schedule a local notification
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: `Opening ${itemName}`,
+        body: `You are about to access the ${itemName} screen`,
+        data: { screen: screenName },
+      },
+      trigger: null, // null means show immediately
+    });
+    
+    // Navigate to the screen
     navigation.navigate(screenName);
+  };
+
+  const scheduleTestNotification = async () => {
+    // Schedule a notification for 5 seconds in the future
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Scheduled Notification 📬",
+        body: 'This is a test notification scheduled 5 seconds ago!',
+        data: { testData: 'Test notification from Grid Layout App' },
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
   };
 
   const renderRowItem = ({ item }) => (
     <TouchableOpacity
       style={styles.rowItem}
-      onPress={() => handleItemPress(item.screen)}
+      onPress={() => handleItemPress(item.screen, item.name)}
       activeOpacity={0.7}
     >
       <View style={[styles.iconContainer, { backgroundColor: item.color }]}>
@@ -73,7 +99,7 @@ const HomeScreen = ({ navigation }) => {
   const renderGridItem = ({ item }) => (
     <TouchableOpacity
       style={styles.gridItem}
-      onPress={() => handleItemPress(item.screen)}
+      onPress={() => handleItemPress(item.screen, item.name)}
       activeOpacity={0.7}
     >
       <View style={[styles.gridIconContainer, { backgroundColor: item.color }]}>
@@ -86,6 +112,14 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.notificationButton}
+          onPress={scheduleTestNotification}
+        >
+          <Ionicons name="notifications" size={20} color="white" />
+          <Text style={styles.toggleText}>Test Notification</Text>
+        </TouchableOpacity>
+        
         <TouchableOpacity
           style={styles.toggleButton}
           onPress={() => setIsGridView(!isGridView)}
@@ -123,7 +157,18 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  notificationButton: {
+    backgroundColor: '#FF3B30',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
   },
   toggleButton: {
     backgroundColor: '#007AFF',
